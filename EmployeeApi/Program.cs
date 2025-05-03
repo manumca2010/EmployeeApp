@@ -19,9 +19,13 @@ builder.Services.AddEndpointsApiExplorer();       // Enables minimal API and Swa
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddTransient<ExceptionHandlingMiddleware>();
-
-
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+    });
+});
 
 
 
@@ -43,6 +47,7 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ExceptionHandlingMiddleware>(); // Global exception handler
 
 app.UseHttpsRedirection();
+app.UseCors("AllowAll");
 
 app.MapControllers();
 
